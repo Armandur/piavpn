@@ -1,0 +1,7 @@
+.env
+.git
+.github
+tmp/
+__pycache__/
+*.pyc
+*.pyo

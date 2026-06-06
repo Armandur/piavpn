@@ -1,0 +1,18 @@
+services:
+  piavpn:
+    build: .
+    container_name: piavpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file: .env
+    ports:
+      - "${CONTROL_PORT:-8000}:8000"
+      - "${PROXY_PORT:-8888}:8888"
+    volumes:
+      - piavpn_data:/data
+    restart: unless-stopped
+
+volumes:
+  piavpn_data:
