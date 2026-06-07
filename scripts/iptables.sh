@@ -10,9 +10,13 @@ iptables -P INPUT DROP
 iptables -P OUTPUT DROP
 iptables -P FORWARD DROP
 
-# Loopback (Docker DNS på 127.0.0.11 + intern kommunikation)
+# Loopback (intern kommunikation)
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
+
+# Docker DNS-resolver (127.0.0.11) går inte alltid via lo-interfacet
+iptables -A OUTPUT -d 127.0.0.11 -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -d 127.0.0.11 -p tcp --dport 53 -j ACCEPT
 
 # Tillåt svar på etablerade anslutningar (proxy-svar tillbaka till klient)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
